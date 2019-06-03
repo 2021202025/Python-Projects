@@ -22,7 +22,8 @@ while flag:
     word = input("Word to be searched: ")
     word = word.lower()
     result = loadDict(word)
-    print(result)
+    for i in result:
+        print("->",i)
     search = input("Search more or Exit? ")
     search = search.lower()
     if(search == "exit" or search == "quit"):
