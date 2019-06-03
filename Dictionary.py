@@ -10,6 +10,12 @@ def loadDict(word):
     if word in dictionary.keys():
         return(dictionary[word])
 
+    elif word.title() in dictionary.keys():
+        return(dictionary[word.title()])
+
+    elif word.upper() in dictionary.keys():
+        return(dictionary[word.upper()])
+
     elif(len(difflib.get_close_matches(word, dictionary.keys()))>0):
         closeIn = input("Did you mean %s instead, you dummy? [y/n] " % difflib.get_close_matches(word, dictionary.keys())[0])
         closeIn = closeIn.lower()
