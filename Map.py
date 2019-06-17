@@ -19,20 +19,24 @@ def color_producer(elev):
         return 'orange'
 
 map = folium.Map(location=[45,-120], zoom_start=5)
-fg = folium.FeatureGroup(name="My Map")
 
+fgv = folium.FeatureGroup(name="Volcanoes")
 
 for lt, ln in zip(lat,lon):
     # fg.add_child(folium.Marker(location=[lt, ln], popup=names[count]+" "+str(elevation[count])+" metres", icon=folium.Icon(color=color_producer(elevation[count]))))
-    fg.add_child(folium.CircleMarker(location=(lt, ln), popup=names[count]+" "+str(elevation[count])+" metres", radius=8, fill=True,
+    fgv.add_child(folium.CircleMarker(location=(lt, ln), popup=names[count]+" "+str(elevation[count])+" metres", radius=8, fill=True,
                                      fill_color = color_producer(elevation[count]), color='grey', fill_opacity = 1))
     count+=1
 
-fg.add_child(folium.GeoJson(data=open('world.json', 'r', encoding='utf-8-sig').read(),
+fgp = folium.FeatureGroup(name="Population")
+
+fgp.add_child(folium.GeoJson(data=open('world.json', 'r', encoding='utf-8-sig').read(),
                             style_function= lambda x: {'fillColor':'green' if x['properties']['POP2005'] < 10000000
                             else 'orange' if  10000000 < x['properties']['POP2005'] < 50000000 else 'red'}))
 
-map.add_child(fg)
+map.add_child(fgv)
+map.add_child(fgp)
+map.add_child(folium.LayerControl())
 map.save("Map2.html")
 
 
