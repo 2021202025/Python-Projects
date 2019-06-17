@@ -12,7 +12,7 @@ count = 0
 
 def color_producer(elev):
     if elev<1500:
-        return 'green'
+        return 'blue'
     elif elev>2500:
         return 'red'
     else:
@@ -24,9 +24,13 @@ fg = folium.FeatureGroup(name="My Map")
 
 for lt, ln in zip(lat,lon):
     # fg.add_child(folium.Marker(location=[lt, ln], popup=names[count]+" "+str(elevation[count])+" metres", icon=folium.Icon(color=color_producer(elevation[count]))))
-    fg.add_child(folium.CircleMarker(location=(lt, ln), popup=names[count]+" "+str(elevation[count])+" metres", radius=5, fill=True,
+    fg.add_child(folium.CircleMarker(location=(lt, ln), popup=names[count]+" "+str(elevation[count])+" metres", radius=8, fill=True,
                                      fill_color = color_producer(elevation[count]), color='grey', fill_opacity = 1))
     count+=1
+
+fg.add_child(folium.GeoJson(data=open('world.json', 'r', encoding='utf-8-sig').read(),
+                            style_function= lambda x: {'fillColor':'green' if x['properties']['POP2005'] < 10000000
+                            else 'orange' if  10000000 < x['properties']['POP2005'] < 50000000 else 'red'}))
 
 map.add_child(fg)
 map.save("Map2.html")
