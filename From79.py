@@ -31,3 +31,57 @@ while True:
         print("Please check the following: ")
         for note in notes:
             print(note)
+
+with open("countries-raw.txt", "r") as file:
+    content = file.readlines()
+
+content = [i.strip("\n") for i in content if "\n" in i]
+content = [i for i in content if i != ""]
+content = [i for i in content if i != "Top of Page"]
+content = [i for i in content if len(i) > 1]
+# for i in content:
+#     print(i)
+
+
+checklist = ["Portugal", "Germany", "Munster", "Spain"]
+
+for i in content:
+    if i in checklist:
+        continue
+    else:
+        checklist.append(i)
+print(sorted(checklist))
+
+import pandas
+
+dataFrame = pandas.read_csv("countries-by-area.txt")
+dataFrame = dataFrame.T
+area = dataFrame.iloc[2]
+population = dataFrame.iloc[3]
+pop_density = []
+count = 0
+for a,p in zip(area,population):
+    pop_density.append(population[count]/area[count])
+    count += 1
+    if count >= 50:
+        break
+
+# print(pop_density)
+dataFrame = dataFrame.T
+dataFrame = dataFrame.assign(Density = pop_density)
+
+# print(dataFrame)
+dataFrame = dataFrame.T
+# most_dense = dataFrame.iloc[4]
+# print(sorted(most_dense, reverse=True))
+# dataFrame = dataFrame.T
+print(sorted(dataFrame.iloc[4], reverse=True))
+
+import pandas
+
+data = pandas.read_csv("countries_by_area.txt")
+data["density"] = data["population_2013"] / data["area_sqkm"]
+data = data.sort_values(by="density", ascending=False)
+
+for index, row in data[:5].iterrows():
+    print(row["country"])
